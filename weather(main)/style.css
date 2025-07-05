@@ -17,9 +17,8 @@ body.dark {
   padding: 8px 12px;
   font-size: 18px;
   background: rgba(255, 255, 255, 0.3);
-  border: 1px;
   border-radius: 10px;
-  border-color: #333;
+  border: 1px solid #b8b8b8;
   cursor: pointer;
   color: #8b7f7f;
   backdrop-filter: blur(5px);
@@ -93,27 +92,48 @@ header {
   box-shadow: 0 8px 32px rgba(133, 133, 133, 0.2);
 }
 
-
 .search {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
+  max-width: 400px;
+  flex-wrap: nowrap;
 }
 
 
 .search input {
-  width: 2400px;
+  flex: 1;
+  min-width: 0;
+  width: 100%;
   padding: 12px 18px;
   border: none;
+   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border-radius: 25px;
   outline: none;
   font-size: 16px;
-  background-color: #e1e1e1;
+  background-color: #ffffff;
+  
   color: #000000;
-  transition: all 0.3s ease;
 }
+
+
+.search button {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+
 /* Default card style */
 .card {
   transition: background 0.5s ease, box-shadow 0.3s ease;
@@ -154,7 +174,7 @@ header {
   color: #343434;
 }
 
-
+/* 
 .search button {
   background-color: #ffffff;
   border: none;
@@ -168,7 +188,7 @@ header {
   justify-content: center;
   transition: 0.3s;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
+} */
 
 .search button img {
   width: 16px;
@@ -241,4 +261,73 @@ header {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
+}
+/* Responsive tweaks for small screens */
+@media (max-width: 600px) {
+  .mode-toggle {
+    top: 20px;
+    right: 20px;
+    padding: 6px 10px;
+    font-size: 16px;
+  }
+
+  header h1 {
+    font-size: 28px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
+
+   
+  .search {
+    max-width: 100%;
+    padding: 0 15px;
+  }
+
+
+
+  .search input {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .search button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    padding: 0;
+  }
+
+  .weather-icon {
+    width: 90px;
+    margin: 15px 0;
+  }
+
+  .temp {
+    font-size: 36px;
+  }
+
+  .city {
+    font-size: 26px;
+  }
+
+  .details {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 0;
+  }
+
+  .col img {
+    width: 30px;
+  }
+
+  .humidity, .wind {
+    font-size: 16px;
+  }
+
+  .card {
+    padding: 20px;
+  }
 }
