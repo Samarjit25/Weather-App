@@ -3,102 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WEATHER APP</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="light">
+    <button class="mode-toggle">🌙</button>
     <div class="card">
-        <div class="search">
-        <input type="text" placeholder="Enter name of country or city" spellcheck="false">
-        <button><img src="images/search.png"></button>
-    </div>
+  <div class="container">
+    <header>
+      <h1>Weather Now ⛅</h1>
+      <p class="subtitle">Stay informed with, real-time weather updates for any city around the globe.</p>
+      
+    </header>
 
-    <div class="error">
+    
+      <div class="search">
+        <input type="text" placeholder="Enter city name" spellcheck="false">
+        <button><img src="images/search.png" alt="Search"></button>
+      </div>
+
+      <div class="error">
         <p>Invalid city name</p>
-    </div>
-    <div class="weather">
-        <img src="images/rain.png" class="weather-icon">
+      </div>
+
+      <div class="weather">
+        <img src="images/rain.png" class="weather-icon" alt="Weather Icon">
         <h1 class="temp">22°C</h1>
         <h2 class="city">New York</h2>
         <div class="details">
-            <div class="col">
-                <img src="images/humidity.png" >
-                <div>
-                    <p class="humidity">50%</p>
-                    <p>Humidity</p>                
-                </div>
+          <div class="col">
+            <img src="images/humidity.png" alt="Humidity">
+            <div>
+              <p class="humidity">50%</p>
+              <p>Humidity</p>
             </div>
-            <div class="col">
-                <img src="images/wind.png" >
-                <div>
-                    <p class="wind">15 km/hr</p>
-                    <p>Wind Speed</p>                
-                </div>
+          </div>
+          <div class="col">
+            <img src="images/wind.png" alt="Wind Speed">
+            <div>
+              <p class="wind">15 km/hr</p>
+              <p>Wind Speed</p>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-    </div>
+  </div>
+  </div>
+
 <script>
-    const apiKey="863242cfb2b1d357e6093d9a4df19a4b";
-    const apiUrl="https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
-    const searchBox=document.querySelector(".search input");
-    const searchBtn=document.querySelector(".search button");
-    const weatherIcon=document.querySelector(".weather-icon");
+const apiKey = "fdd480ff0a4367497da84c64a052cee5";
+const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
 
+const searchBox = document.querySelector(".search input");
+const searchBtn = document.querySelector(".search button");
+const weatherIcon = document.querySelector(".weather-icon");
+const card = document.querySelector(".card");
 
+// Toggle Light/Dark Mode
+const modeToggle = document.querySelector(".mode-toggle");
+modeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+  document.body.classList.toggle("light");
+  modeToggle.innerText = document.body.classList.contains("dark") ? "☀️" : "🌙";
+});
 
-   async function checkWeather(city) {
+async function checkWeather(city) {
+  try {
     const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
     const data = await response.json();
 
     if (data.cod != 200) {
-        // error from API (e.g., city not found)
-        document.querySelector(".error").style.display = "block";
-        document.querySelector(".weather").style.display = "none";
-        return;
+      document.querySelector(".error").style.display = "block";
+      document.querySelector(".weather").style.display = "none";
+      return;
     }
 
-    // Make sure the fields exist before using them
-    if (!data.main || !data.weather || !data.wind) {
-        console.error("Incomplete data:", data);
-        document.querySelector(".error").style.display = "block";
-        document.querySelector(".weather").style.display = "none";
-        return;
-    }
-
-    // Update the DOM
+    // Update text
     document.querySelector(".city").innerHTML = data.name;
     document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°C";
     document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
     document.querySelector(".wind").innerHTML = data.wind.speed + " km/hr";
 
+    // Update icon
     const weatherCondition = data.weather[0].main;
-    if (weatherCondition == "Clouds") {
-        weatherIcon.src = "images/clouds.png";
-    } else if (weatherCondition == "Clear") {
-        weatherIcon.src = "images/clear.png";
-    } else if (weatherCondition == "Rain") {
-        weatherIcon.src = "images/rain.png";
-    } else if (weatherCondition == "Drizzle") {
-        weatherIcon.src = "images/drizzle.png";
-    } else if (weatherCondition == "Mist") {
-        weatherIcon.src = "images/mist.png";
+    if (weatherCondition === "Clouds") {
+      weatherIcon.src = "images/clouds.png";
+    } else if (weatherCondition === "Clear") {
+      weatherIcon.src = "images/clear.png";
+    } else if (weatherCondition === "Rain") {
+      weatherIcon.src = "images/rain.png";
+    } else if (weatherCondition === "Drizzle") {
+      weatherIcon.src = "images/drizzle.png";
+    } else if (weatherCondition === "Mist") {
+      weatherIcon.src = "images/mist.png";
+    } else if (weatherCondition === "Snow") {
+      weatherIcon.src = "images/snow.png";
+    } else {
+      weatherIcon.src = "images/clear.png";
     }
 
+    // Clear previous weather class and set new background class
+    card.className = "card";
+    const condition = weatherCondition.toLowerCase();
+    const supported = ["clear", "clouds", "rain", "drizzle", "mist", "snow"];
+    if (supported.includes(condition)) {
+      card.classList.add(`weather-${condition}`);
+    }
+
+    // Show results
     document.querySelector(".weather").style.display = "block";
     document.querySelector(".error").style.display = "none";
+  } catch (error) {
+    console.error("API fetch failed", error);
+    document.querySelector(".error").style.display = "block";
+    document.querySelector(".weather").style.display = "none";
+  }
 }
 
-}
+// Search on button click
+searchBtn.addEventListener("click", () => {
+  const city = searchBox.value.trim();
+  if (city) checkWeather(city);
+});
 
-
-    searchBtn.addEventListener("click",()=>{
-        checkWeather(searchBox.value);
-
-    })
-
-
+// Search on pressing Enter
+searchBox.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    const city = searchBox.value.trim();
+    if (city) checkWeather(city);
+  }
+});
 </script>
+
 </body>
 </html>
